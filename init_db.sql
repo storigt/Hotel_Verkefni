@@ -1,0 +1,45 @@
+create TABLE IF NOT EXISTS Customers (
+    CustomerID VARCHAR(10) PRIMARY KEY,
+    Name VARCHAR(64) NOT NULL,
+    Email VARCHAR(64) NOT NULL UNIQUE,
+    Phone VARCHAR(15) NOT NULL
+);
+
+create TABLE IF NOT EXISTS Hotels (
+    HotelID VARCHAR(10) PRIMARY KEY,
+    Name VARCHAR(64) NOT NULL,
+    Location VARCHAR(255) NOT NULL,
+    Amenities TEXT,
+    Rating INT CHECK (Rating BETWEEN 1 AND 5)
+);
+
+create TABLE IF NOT EXISTS Bookings (
+    BookingID VARCHAR(10) PRIMARY KEY,
+    CustomerID VARCHAR(10) NOT NULL,
+    RoomID VARCHAR(10) NOT NULL,
+    CheckInDate DATE NOT NULL,
+    CheckOutDate DATE NOT NULL,
+    Status VARCHAR(20),
+    Price DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
+    FOREIGN KEY (RoomID) REFERENCES Rooms(RoomID)
+);
+
+
+create TABLE IF NOT EXISTS Rooms (
+    RoomID VARCHAR(10) PRIMARY KEY,
+    HotelID VARCHAR(10) NOT NULL REFERENCES Hotels(HotelID),
+    Type VARCHAR(50) NOT NULL,
+    Price DECIMAL(10, 2) NOT NULL,
+    Availability BOOLEAN NOT NULL DEFAULT TRUE
+);
+
+
+create TABLE IF NOT EXISTS Reviews (
+    ReviewID INTEGER PRIMARY KEY AUTOINCREMENT,
+    HotelID VARCHAR(10) NOT NULL REFERENCES Hotels(HotelID),
+    CustomerID VARCHAR(10) NOT NULL REFERENCES Customers(CustomerID),
+    Text TEXT,
+    Rating INT CHECK (Rating BETWEEN 1 AND 5)
+);
+
